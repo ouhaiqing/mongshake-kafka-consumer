@@ -1,0 +1,56 @@
+## log
+
+#注：在sh启动的时候有指定加载该配置文件的路径， 不会读取该日志配置
+logging:
+    config: classpath:logback.xml
+
+## server
+server:
+    port: 8080
+
+spring:
+    application:
+          name: shake
+    aop:
+          auto: true
+
+
+
+
+    # kafka
+    kafka:
+          # kafka服务器地址(多个用,分割)
+          bootstrap-servers: 10.104.6.98:9092
+          #设置为手动提交
+          listener:
+                ack-mode: manual
+          consumer:
+                # 指定一个默认的组名
+                group-id: mongoshake
+                #设置为是否手动提交， 配合ack-mode一起使用
+                enable-auto-commit: false
+                # earliest:当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
+                # latest:当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据
+                # none:topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
+                auto-offset-reset: latest
+                # 服务器地址
+                bootstrap-servers: 10.104.6.98:9092
+                #最大消费
+                max-poll-records: 2
+                # key/value的反序列化
+                key-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+                value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+                topic: mongoshake
+
+          producer:
+                # key/value的序列化
+                key-serializer: org.apache.kafka.common.serialization.StringSerializer
+                value-serializer: org.apache.kafka.common.serialization.StringSerializer
+                # 批量抓取
+                batch-size: 65536
+                 # 缓存容量
+                buffer-memory: 524288
+                # 服务器地址
+                bootstrap-servers: 10.104.6.98:9092
+
+

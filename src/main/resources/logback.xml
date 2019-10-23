@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod=" 5 seconds">
+    <!-- dev -->
+    <!-- 定义日志文件 输入位置 -->
+    <!-- 定义日志文件 输入位置， 貌似不能用相对路径， 不清楚是不是该版本的bug -->
+    <property name="log_dir" value="/usr/local/shake/shakeApplication/logs" />
+    <!-- 日志最大的历史 30天 -->
+    <property name="maxHistory" value="30" />
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p]-[%C %M %L]-%m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>info</level>
+        </filter>
+    </appender>
+
+    <!-- info log 文件输出 -->
+    <appender name="infofile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/shake.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_dir}/info/%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>30MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p]-[%C %M %L]-%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- error log 文件输出 -->
+    <appender name="errorfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/error.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_dir}/error/%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>30MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p]-[%C %M %L]-%m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- druid数据源配置打印日志 start-->
+    <logger name="druid.sql">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="druid.sql.DataSource">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="druid.sql.Connection">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="druid.sql.Statement">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="druid.sql.ResultSet">
+        <level value="DEBUG"/>
+    </logger>
+
+    <!--日志输出设置 -->
+    <logger name="com.fpx" level="DEBUG"/>
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.apache" level="ERROR"/>
+    <logger name="org.mybatis" level="ERROR"/>
+    <logger name="org.I0Itec" level="ERROR"/>
+
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="infofile" />
+        <appender-ref ref="errorfile" />
+    </root>
+
+</configuration>
